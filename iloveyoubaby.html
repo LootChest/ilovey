@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Наш уютный альбом любви ✨🧶💋</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@900&family=Marck+Script&display=swap" rel="stylesheet">
+    <style>
+        :root { --pink: #FF69B4; }
+        
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; touch-action: none; font-family: 'Nunito', sans-serif; }
+        
+        /* --- НОВЫЙ ФОН: ГУСТОЙ МЕХ В ЦВЕТАХ ПЛЕДА (БЕЗ КЛЕТОК) --- */
+        body {
+            background-color: #FFB5E8; /* Базовый розовый */
+            background-image: 
+                /* 1. Твоя НОВАЯ текстура густого меха Gemini */
+                url('https://i.postimg.cc/tTKMSCNX/Gemini-Generated-Image-nka4ohnka4ohnka4.png'),
+                /* 2. Градиент Розовый -> Персиковый */
+                linear-gradient(135deg, rgba(255, 181, 232, 0.7) 0%, rgba(255, 233, 175, 0.7) 100%);
+            background-size: cover; /* Мех на весь экран */
+            background-blend-mode: overlay; /* Смешиваем мех и цвет */
+            background-attachment: fixed;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        .container { 
+            text-align: center; z-index: 100; position: absolute; 
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 90%; pointer-events: none; 
+        }
+        .jelly-text { 
+            color: white; font-size: 3rem; 
+            /* Усиленная тень для читаемости на пушистом фоне */
+            text-shadow: 0 5px 20px rgba(213, 63, 140, 0.5), 2px 2px 10px rgba(0,0,0,0.1); 
+            animation: jelly 2.5s infinite; 
+        }
+
+        .surprise-btn {
+            position: absolute; padding: 15px 35px; font-size: 1.2rem; font-weight: 900;
+            color: var(--pink); background: white; border: none; border-radius: 50px;
+            cursor: pointer; z-index: 200; 
+            /* Глубокая тень, чтобы кнопка "тонула" в меху */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15), inset 0 -3px 0 rgba(0,0,0,0.05);
+            transition: left 0.3s ease, top 0.3s ease; white-space: nowrap;
+        }
+
+        /* --- АЛЬБОМ ИЗ ПОЛАРОИДОВ --- */
+        #album-container {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+            width: 320px; height: 450px; z-index: 700;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #album-container.active { transform: translate(-50%, -50%) scale(1); }
+
+        .polaroid-card {
+            position: absolute; width: 100%; background: #fff; padding: 15px 15px 40px 15px;
+            /* Усиленная тень для объема на шерсти */
+            box-shadow: 10px 20px 50px rgba(0,0,0,0.25); 
+            cursor: pointer;
+            transition: transform 0.5s ease, z-index 0s; box-sizing: border-box;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* Скрепка */
+        .paperclip {
+            position: absolute; top: -15px; right: 40px; width: 30px; height: 60px;
+            border: 3px solid #ccc; border-radius: 20px; background: transparent;
+            z-index: 10; transform: rotate(10deg);
+            border-bottom: none; border-top-right-radius: 15px;
+        }
+        .paperclip::after {
+            content: ''; position: absolute; top: 10px; left: 5px; width: 10px; height: 35px;
+            border: 3px solid #bbb; border-radius: 10px; border-top: none;
+        }
+
+        .polaroid-card img { width: 100%; height: 280px; object-fit: cover; border: 1px solid #eee; }
+        .caption { font-family: 'Marck Script', cursive; font-size: 1.6rem; color: #333; margin-top: 15px; text-align: center; }
+
+        /* Начальные повороты карточек */
+        .card-1 { transform: rotate(-4deg); z-index: 3; }
+        .card-2 { transform: rotate(3deg); z-index: 2; }
+        .card-3 { transform: rotate(-1deg); z-index: 1; }
+
+        /* Счетчик внизу альбома */
+        .love-counter-final { 
+            position: absolute; bottom: -80px; width: 100%; text-align: center;
+            color: white; font-weight: 900; font-size: 1.2rem; text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        @keyframes jelly { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes stormMove { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
+        
+        .heart { position: absolute; pointer-events: none; z-index: 600; font-size: 26px; /* Сердца будут видны на меху */ }
+        .bear { position: absolute; font-size: 55px; z-index: 50; cursor: pointer; user-select: none; /* Мишки на меху */ }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-ui">
+        <h1 class="jelly-text">Специально для тебя<br>моя лубимка✨💋</h1>
+    </div>
+
+    <button class="surprise-btn" id="magic-btn" style="top: 75%; left: 50%; transform: translateX(-50%);" onclick="handleMagic(event)">Нажми на меня 💋</button>
+
+    <div id="album-container">
+        <div class="polaroid-card card-1" onclick="nextCard(this)">
+            <div class="paperclip"></div>
+            <img src="https://i.postimg.cc/8z06WFH7/photo-2026-03-15-21-25-03.jpg">
+            <p class="caption">Ты лучшее, что случалось со мной❤️</p>
+        </div>
+
+        <div class="polaroid-card card-2" onclick="nextCard(this)">
+            <div class="paperclip" style="right: auto; left: 40px;"></div>
+            <img src="https://i.postimg.cc/5NVxjxW4/photo-2026-03-07-13-57-26.jpg">
+            <p class="caption">Хочу сказать спасибо, что поддерживаешь во мне искру жизни✨</p>
+        </div>
+
+        <div class="polaroid-card card-3" onclick="nextCard(this)">
+            <div class="paperclip"></div>
+            <img src="https://i.postimg.cc/XvpWtq90/a-i-maja-dva-kadra-s-serdcem.jpg">
+            <p class="caption">В старости, буду называть тебя старушенцией)</p>
+        </div>
+
+        <div class="love-counter-final">Люблю тебя на: <span id="love-num">1000000</span>%</div>
+    </div>
+
+    <audio id="snd-kiss" src="https://www.soundjay.com/human/sounds/kiss-01.mp3"></audio>
+    <audio id="snd-pop" src="https://www.myinstants.com/media/sounds/pop_1.mp3"></audio>
+    <audio id="bg-music" loop src="https://files.catbox.moe/8z6reo.mp3"></audio>
+
+    <script>
+        let clicks = 0;
+        let loveValue = 1000000;
+        let maxZ = 3;
+
+        function handleMagic(e) {
+            clicks++;
+            document.getElementById('snd-kiss').cloneNode().play().catch(()=>{});
+            const btn = document.getElementById('magic-btn');
+            btn.innerText += " ещё";
+            
+            // Перемещение кнопки
+            const padding = 60;
+            const newX = Math.random() * (window.innerWidth - btn.offsetWidth - padding) + padding/2;
+            const newY = Math.random() * (window.innerHeight - btn.offsetHeight - padding) + padding/2;
+            btn.style.left = newX + 'px';
+            btn.style.top = newY + 'px';
+            btn.style.transform = 'none';
+
+            // Эффект сердец
+            for(let i=0; i<10; i++) spawnHeart(e.pageX, e.pageY);
+
+            if (clicks >= 10) {
+                btn.style.display = 'none';
+                document.getElementById('main-ui').style.opacity = '0';
+                setTimeout(showFinal, 500);
+            }
+        }
+
+        function spawnHeart(x, y) {
+            const h = document.createElement('div');
+            h.className = 'heart'; h.innerHTML = '❤️';
+            h.style.left = x + 'px'; h.style.top = y + 'px';
+            document.body.appendChild(h);
+            const tx = (Math.random()-0.5)*300;
+            const ty = (Math.random()-0.5)*300;
+            h.animate([
+                { transform: 'translate(0,0) scale(1)', opacity: 1 },
+                { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
+            ], { duration: 1000, easing: 'ease-out', fill: 'forwards' });
+            setTimeout(() => h.remove(), 1000);
+        }
+
+        function nextCard(card) {
+            // Звук чмока при перелистывании
+            document.getElementById('snd-kiss').cloneNode().play().catch(()=>{});
+            
+            maxZ++;
+            card.style.transition = "transform 0.5s ease";
+            card.style.transform = "translateX(150%) rotate(20deg)"; // Улетает вправо
+            
+            setTimeout(() => {
+                card.style.zIndex = 0; // Теперь она самая нижняя
+                card.style.transform = card.classList.contains('card-1') ? "rotate(-4deg)" : 
+                                      card.classList.contains('card-2') ? "rotate(3deg)" : "rotate(-1deg)";
+            }, 500);
+        }
+
+        function showFinal() {
+            document.getElementById('album-container').classList.add('active');
+            document.getElementById('bg-music').play().catch(()=>{});
+            
+            // Шторм сердец
+            setInterval(() => {
+                const h = document.createElement('div');
+                h.className = 'heart'; h.innerHTML = '❤️';
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.bottom = '-50px';
+                h.style.zIndex = "600";
+                h.style.animation = `stormMove ${Math.random()*2+1}s linear forwards`;
+                document.body.appendChild(h);
+                setTimeout(() => h.remove(), 2000);
+            }, 50);
+
+            // Счетчик
+            setInterval(() => {
+                loveValue += Math.floor(Math.random() * 500);
+                document.getElementById('love-num').innerText = loveValue.toLocaleString();
+            }, 50);
+        }
+
+        function spawnBear() {
+            if (clicks >= 10) return;
+            const b = document.createElement('div');
+            b.className = 'bear'; b.innerHTML = '🧸';
+            b.style.left = Math.random() * 80 + 10 + '%';
+            b.style.top = Math.random() * 70 + 15 + '%';
+            
+            const popBear = (e) => {
+                e.stopPropagation();
+                document.getElementById('snd-pop').cloneNode().play().catch(()=>{});
+                const rect = b.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+                
+                // Взрыв сердец из медведя
+                for(let i=0; i<15; i++) {
+                    setTimeout(() => spawnHeart(x, y), i * 15);
+                }
+                
+                b.remove();
+                setTimeout(spawnBear, 800);
+            };
+
+            b.addEventListener('mousedown', popBear);
+            b.addEventListener('touchstart', popBear);
+            document.body.appendChild(b);
+        }
+
+        // Создаем первых медведей
+        for(let i=0; i<6; i++) spawnBear();
+    </script>
+</body>
+</html>
